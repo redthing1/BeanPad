@@ -12,15 +12,22 @@ using ReactiveUI.Fody.Helpers;
 
 namespace BeanPad.ViewModels.Pages {
     public class HomePageVM : ViewModelBase {
-        public string Greeting => "Hello, welcome to the world!";
         [Reactive] public TextDocument EditorDocument { get; set; } = new();
+        public ICommand MenuNew { get; }
         public ICommand MenuExit { get; } = ReactiveCommand.Create(() => { getLifetime().Shutdown(); });
         public ICommand MenuOpenFile { get; }
         public ICommand MenuSave { get; }
         public ICommand MenuSaveAs { get; }
 
         public HomePageVM() {
+            MenuNew = ReactiveCommand.Create(newFile);
             MenuOpenFile = ReactiveCommand.CreateFromTask(openFile);
+            MenuSave = ReactiveCommand.Create(saveFile);
+            MenuSaveAs = ReactiveCommand.Create(saveFileAs);
+        }
+
+        private void newFile() {
+            EditorDocument = new TextDocument();
         }
 
         private async Task openFile() {
@@ -29,7 +36,26 @@ namespace BeanPad.ViewModels.Pages {
             var fileName = res.FirstOrDefault();
             if (fileName != null) {
                 var fileContents = await File.ReadAllTextAsync(fileName);
-                EditorDocument = new TextDocument(fileContents);
+                EditorDocument = new TextDocument(fileContents) {FileName = fileName};
+            }
+        }
+
+        private async Task saveFile() {
+            if (EditorDocument.FileName != null) {
+                // save to current file
+                await File.WriteAllTextAsync(EditorDocument.FileName, EditorDocument.Text);
+            } else {
+                // run save as
+                await saveFileAs();
+            }
+        }
+
+        private async Task saveFileAs() {
+            var dlg = new SaveFileDialog();
+            var fileName = await dlg.ShowAsync(getLifetime().MainWindow);
+            if (fileName != null) {
+                EditorDocument = new TextDocument(EditorDocument.Text) {FileName = fileName};
+                await saveFile();
             }
         }
 

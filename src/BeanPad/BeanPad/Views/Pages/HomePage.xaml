@@ -15,10 +15,10 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <MenuItem Header="File">
-                    <MenuItem Header="New" InputGesture="CTRL + N" />
+                    <MenuItem Header="New" InputGesture="CTRL + N" Command="{Binding MenuNew}" />
                     <MenuItem Header="Open" Command="{Binding MenuOpenFile}" />
                     <MenuItem Header="Save" InputGesture="CTRL + S" Command="{Binding MenuSave}" />
-                    <MenuItem Header="Save As" InputGesture="CTRL + S" Command="{Binding MenuSaveAs}" />
+                    <MenuItem Header="Save As" InputGesture="CTRL + SHIFT + S" Command="{Binding MenuSaveAs}" />
                     <Separator />
                     <MenuItem Header="Exit" InputGesture="CTRL + Q" Command="{Binding MenuExit}" />
                 </MenuItem>
