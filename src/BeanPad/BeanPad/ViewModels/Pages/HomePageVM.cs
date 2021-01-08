@@ -26,8 +26,7 @@ namespace BeanPad.ViewModels.Pages {
         public ICommand MenuSave { get; }
         public ICommand MenuSaveAs { get; }
 
-        public string CurrentFileShortname => currentFileShortname.Value;
-        private ObservableAsPropertyHelper<string> currentFileShortname;
+        [ObservableAsProperty] public string CurrentFileShortname { get; set; }
 
         public HomePageVM() {
             MenuNew = ReactiveCommand.Create(newFile);
@@ -35,9 +34,9 @@ namespace BeanPad.ViewModels.Pages {
             MenuSave = ReactiveCommand.Create(saveFile);
             MenuSaveAs = ReactiveCommand.Create(saveFileAs);
 
-            currentFileShortname = this
+            this
                 .WhenAnyValue(x => x.EditorDocument, change => Path.GetFileName(change.FileName) ?? "*")
-                .ToProperty(this, x => x.CurrentFileShortname);
+                .ToPropertyEx(this, x => x.CurrentFileShortname);
         }
 
         private void newFile() {
