@@ -12,6 +12,9 @@
             <SubType>Designer</SubType>
         </AvaloniaResource>
         <AvaloniaResource Include="Assets\**" />
+        <Compile Update="Views\Pages\HomePage.xaml.cs">
+          <DependentUpon>HomePage.xaml</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.10.0-rc1" />
