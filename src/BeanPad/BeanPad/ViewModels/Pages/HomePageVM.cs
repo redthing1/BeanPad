@@ -35,7 +35,7 @@ namespace BeanPad.ViewModels.Pages {
             MenuSaveAs = ReactiveCommand.Create(saveFileAs);
 
             this
-                .WhenAnyValue(x => x.EditorDocument, change => Path.GetFileName(change.FileName) ?? "*")
+                .WhenAnyValue(x => x.EditorDocument, change => change.FileName != null ? Path.GetFileName(change.FileName) : "*")
                 .ToPropertyEx(this, x => x.CurrentFileShortname);
         }
 
@@ -46,7 +46,7 @@ namespace BeanPad.ViewModels.Pages {
         private async Task openFile() {
             var dlg = new OpenFileDialog();
             var res = await dlg.ShowAsync(getLifetime().MainWindow);
-            var fileName = res.FirstOrDefault();
+            var fileName = res?[0];
             if (fileName != null) {
                 var fileContents = await File.ReadAllTextAsync(fileName);
                 EditorDocument = new TextDocument(fileContents) {FileName = fileName};
