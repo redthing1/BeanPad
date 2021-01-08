@@ -19,11 +19,17 @@ namespace BeanPad.ViewModels.Pages {
         public ICommand MenuSave { get; }
         public ICommand MenuSaveAs { get; }
 
+        public string CurrentFileShortname => currentFileShortname.Value;
+        private ObservableAsPropertyHelper<string> currentFileShortname;
+
         public HomePageVM() {
             MenuNew = ReactiveCommand.Create(newFile);
             MenuOpenFile = ReactiveCommand.CreateFromTask(openFile);
             MenuSave = ReactiveCommand.Create(saveFile);
             MenuSaveAs = ReactiveCommand.Create(saveFileAs);
+            
+            currentFileShortname = this.WhenAny(x => x.EditorDocument, change => { return change.Value.FileName ?? "*"; })
+                .ToProperty(this, x => x.CurrentFileShortname);
         }
 
         private void newFile() {
