@@ -12,7 +12,14 @@ using ReactiveUI.Fody.Helpers;
 
 namespace BeanPad.ViewModels.Pages {
     public class HomePageVM : ViewModelBase {
-        [Reactive] public TextDocument EditorDocument { get; set; } = new();
+        // [Reactive] public TextDocument EditorDocument { get; set; } = new();
+        private TextDocument editorDocument = new();
+
+        public TextDocument EditorDocument {
+            get => editorDocument;
+            set => this.RaiseAndSetIfChanged(ref editorDocument, value);
+        }
+
         public ICommand MenuNew { get; }
         public ICommand MenuExit { get; } = ReactiveCommand.Create(() => { getLifetime().Shutdown(); });
         public ICommand MenuOpenFile { get; }
@@ -27,8 +34,9 @@ namespace BeanPad.ViewModels.Pages {
             MenuOpenFile = ReactiveCommand.CreateFromTask(openFile);
             MenuSave = ReactiveCommand.Create(saveFile);
             MenuSaveAs = ReactiveCommand.Create(saveFileAs);
-            
-            currentFileShortname = this.WhenAny(x => x.EditorDocument, change => { return change.Value.FileName ?? "*"; })
+
+            currentFileShortname = this
+                .WhenAnyValue(x => x.EditorDocument, change => Path.GetFileName(change.FileName) ?? "*")
                 .ToProperty(this, x => x.CurrentFileShortname);
         }
 
