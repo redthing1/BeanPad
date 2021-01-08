@@ -16,8 +16,9 @@
             <Menu DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <MenuItem Header="File">
                     <MenuItem Header="New" InputGesture="CTRL + N" />
-                    <MenuItem Header="Open" />
-                    <MenuItem Header="Save" InputGesture="CTRL + S" />
+                    <MenuItem Header="Open" Command="{Binding MenuOpenFile}" />
+                    <MenuItem Header="Save" InputGesture="CTRL + S" Command="{Binding MenuSave}" />
+                    <MenuItem Header="Save As" InputGesture="CTRL + S" Command="{Binding MenuSaveAs}" />
                     <Separator />
                     <MenuItem Header="Exit" InputGesture="CTRL + Q" Command="{Binding MenuExit}" />
                 </MenuItem>
@@ -28,7 +29,9 @@
                 </MenuItem>
             </Menu>
             <AvalonEdit:TextEditor Name="Editor"
+                                   Document="{Binding EditorDocument}"
                                    Margin="10"
+                                   ShowLineNumbers="True"
                                    DockPanel.Dock="Bottom"
                                    FontFamily="monospace"
                                    SyntaxHighlighting="MarkDownWithFontSize"
