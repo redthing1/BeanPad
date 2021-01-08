@@ -7,6 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="BeanPad.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
+        FontSize="12"
         Title="BeanPad">
 
     <Design.DataContext>
